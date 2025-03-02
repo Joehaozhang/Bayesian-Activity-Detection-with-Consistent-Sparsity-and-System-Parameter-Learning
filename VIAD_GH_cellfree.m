@@ -5,7 +5,7 @@ function [G_hat,z] = VIAD_GH_cellfree(Y, S)
 %
 % Last updated: 2022/07/08
 % Usage:
-% [G_hat, z,] = VIAD(Y, S)
+% [G_hat, z] = VIAD(Y, S)
 % Solves for X = S{Gamma}H in
 % Y = X + N = S{Gamma}H + N
 % N is Gaussian noise
@@ -13,7 +13,7 @@ function [G_hat,z] = VIAD_GH_cellfree(Y, S)
 %                                 INPUTS                                |
 % Y: input matrix (received signals in BS)                              |
 % S: pilot signals transmitted                                          |
-% verbose: output the progress? (0/1) default: 0.                       |
+% verbose: output the progress? (0/1) default: 1.                       |
 % MAXITER: max number of iterations. default: 200.                      |
 % Threshold: algorithm stop threshold. default: 1e-4.                   |
 % -----------------------------------------------------------------------

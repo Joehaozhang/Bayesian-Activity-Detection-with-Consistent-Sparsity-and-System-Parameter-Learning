@@ -3,9 +3,9 @@ function [G_hat, z] = MAP_GH_cellfree(Y, S)
 % Variational Inference Activity Detection and Channel Estimation
 % Author: Hao Zhang
 %
-% Last updated: 2022/07/08
+% Last updated: 2025/03/01
 % Usage:
-% [G_hat, z, t] = VIAD(Y, S)
+% [G_hat, z] = VIAD(Y, S)
 % Solves for X = S{Gamma}H in
 % Y = X + N = S{Gamma}H + N
 % N is Gaussian noise
@@ -13,9 +13,9 @@ function [G_hat, z] = MAP_GH_cellfree(Y, S)
 %                                 INPUTS                                |
 % Y: input matrix (received signals in BS)                              |
 % S: pilot signals transmitted                                          |
-% verbose: output the progress? (0/1) default: 0.                       |
-% MAXITER: max number of iterations. default: 100.                      |
-% Threshold: algorithm stop threshold. default: 1e-8.                   |
+% verbose: output the progress? (0/1) default: 1.                       |
+% MAXITER: max number of iterations. default: 200.                      |
+% Threshold: algorithm stop threshold. default: 1e-4.                   |
 % -----------------------------------------------------------------------
 %                                 OUTPUTS                               |
 % X: the reconsturcted signals                                          |

@@ -1,7 +1,7 @@
 clear all
 clc
 %% Notation
-% ----------------------------------------                      
+% ---------------------------------------- 
 % |D       |Area size                    |
 % |K       |Number of AP                 |
 % |N       |Number of potential users    |
@@ -41,7 +41,7 @@ sigma_sqrN = 1; % Normalized Sigma2
 TxPow = 200e-3; % 23dBm
 
 % Number of Monte-Carlo simulations
-monte = 500;
+monte = 100;
 %% Generate Signature Sequence (multiplied by transmit power)
 S = (1/sqrt(2*L)*complex(randn(L,N),randn(L,N)));
 S = S./vecnorm(S,2,1);
@@ -49,9 +49,12 @@ S = S./vecnorm(S,2,1);
 %%    Locations of BS and Users
 %     Uniformly distributed APs
     AP = [-D/3,3*D/8;0,3*D/8;D/3,3*D/8;-D/3,D/8;0,D/8;D/3,D/8;-D/3,-D/8;0,-D/8;D/3,-D/8;-D/3,-3*D/8;0,-3*D/8;D/3,-3*D/8];
+
+%     Random APs
+    % AP=unifrnd(-D/2,D/2,K,2);
 %% Variables for evaluation initialization
-Y_real = zeros(L,M,K);
-Y      = Y_real;
+Y_real      = zeros(L,M,K);
+Y           = Y_real;
 gamma       = zeros(N,monte,K); 
 G_real      = repmat(zeros(N,M),[1 1 M monte]);
 Active_List = zeros(N,monte);
@@ -59,9 +62,9 @@ Beta        = zeros(N,K);
 Beta_true   = zeros(N,K);
 Beta2       = zeros(N,K);
 %% Estimation Initialization
-G_hat_vigh  = repmat(zeros(N,M),[1 1 K monte]);
-G_hat_map   = repmat(zeros(N,M),[1 1 K monte]);
-z_hat_vigh = zeros(N,monte);
+G_hat_ghvi     = repmat(zeros(N,M),[1 1 K monte]);
+G_hat_map      = repmat(zeros(N,M),[1 1 K monte]);
+z_hat_vigh     = zeros(N,monte);
 z_inv_hat_vigh = zeros(N,monte);
 %% Generate received signals
 for i = 1:1:monte
@@ -84,8 +87,10 @@ for i = 1:1:monte
         %     Distance-based pathloss (distance from M BS)
         dist = sqrt(sum((UT - AP(k,:)).^2,2));
         Beta(:,k) = 0.2 * 10.^((-128.1 - 37.6*log10(dist))/10);
+
         %     Pathloss with noise
         Beta_true(:,k) = 0.2 * 10.^((-128.1 - 37.6*log10(dist)+2*rand(N,1))/10);
+
         %     Pathloss for normalized noise (variance=1)
         Beta(:,k) = Beta(:,k)/sigma_sqr;
     end
@@ -133,9 +138,12 @@ for i = 1:1:monte
     fprintf('Set %d\n', i); 
 %% Activity detection and Channel estimation
 % GHVI algorithm
-[G_hat_vigh(:,:,:,i), ~] = VIAD_GH_cellfree(Y,S);
+[G_hat_ghvi(:,:,:,i), ~] = VIAD_GH_cellfree(Y,S);
 % MAP algorithm
 [G_hat_map(:,:,:,i), ~] = MAP_GH_cellfree(Y,S);
 end
 %% Estimation END
  fprintf('Simulation Finished\n');
+%% Optional step
+% Dominant AP selection for devices
+DominantAPSelection();
