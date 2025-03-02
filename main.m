@@ -138,7 +138,7 @@ for i = 1:1:monte
     fprintf('Trial %d\n', i); 
 %% Activity detection and Channel estimation
 % GHVI algorithm
-[G_hat_ghvi(:,:,:,i), z_hat_ghvi(:,i)] = VIAD_GH_cellfree(Y,S);
+% [G_hat_ghvi(:,:,:,i), z_hat_ghvi(:,i)] = VIAD_GH_cellfree(Y,S);
 % MAP algorithm
 [G_hat_map(:,:,:,i), z_hat_map(:,i)] = MAP_GH_cellfree(Y,S);
 end

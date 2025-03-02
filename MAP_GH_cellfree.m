@@ -47,9 +47,12 @@ end
 % GH distribution parameters
 z_inv   = K*ones(N,1);
 z       = 1 ./ z_inv;
-a        = 8e-4*ones(N,1);
+a        = 5e-4*ones(N,1);
 % b        = 10*rand(N,1);
-b       = 10*ones(N,1);
+b       = 1*ones(N,1);
+
+% GIG distribution
+lambda_0 = 1e-6;
 
 % Gamma noise distribution
 tau    = 1./scale2;
@@ -76,7 +79,6 @@ for it = 1:MAXITER
             HiT = H(i,:,k);
             Si = S(:,i);
             Y_minusi =  Y_minusi + Gamma(i,k) * Si * HiT;
-%             Sigma_L(:,:,k,i) = ((beta * (Si' * Si) * (HiT * HiT') + z_inv(i))).^(-1);
             Gamma(i,k) = tau * ((tau * (Si' * Si) * (HiT * HiT') + z_inv(i)/2)).^(-1) ...
                 * trace(real(HiT' * Si' * Y_minusi)) ;
             Y_minusi = Y_minusi - Gamma(i,k) * Si * HiT;
@@ -88,7 +90,6 @@ for it = 1:MAXITER
     end
     for k=1:K
         YminusXT = (Y(:,:,k) - X(:,:,k)).';
-%         YT_minusi = YminusXT;
         for i=1:N
             Si = S(:,i);
             Gamma_i = Gamma(i,k);
@@ -112,7 +113,7 @@ for it = 1:MAXITER
         a_old = a(n);
         for i=1:100
             DfDa = (1e-6 - 2)/(2*a(n)) - 1e-6 - 1/2*z(n) + (5*besselk(-5, (a(n)*b(n))^(1/2))/(2*a(n)) + (b(n)*besselk(-4, (a(n)*b(n))^(1/2)))/(2*(a(n)*b(n))^(1/2)))/besselk(-5, (a(n)*b(n))^(1/2));
-            a(n) = real(a(n) + 0.05 * DfDa);
+            a(n) = real(a(n) + 0.1 * DfDa);
             if abs(a(n)-a_old)<0.00001
                 break;
             end
@@ -146,7 +147,7 @@ for it = 1:MAXITER
         fprintf('Method: MAP, iter %d: error = %g, tau = %g, relative change = %g\n', it, recons_err, tau, relative_change);
     end
     %% Check convergence
-    if it > 20 && (relative_change < Threshold || error(it)>error(it-1))%
+    if it > 50 && (relative_change < Threshold || error(it)>error(it-1))%
         break;
     end
 end
