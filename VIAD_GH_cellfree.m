@@ -64,7 +64,7 @@ kappa_a1 = -lambda_0/2 + 1e-6;
 kappa_a2 = 1e-6;
 
 % Gamma noise distribution
-beta    = 1./scale2;
+tau    = 1./scale2;
 
 % Gamma noise prior
 e_0      = 1e-6;
@@ -87,9 +87,9 @@ for it = 1:MAXITER
             HiT = H(i,:,k);
             Si = S(:,i);
             Y_minusi = Y_minusi + Gamma(i,k) * Si * HiT;
-            Sigma_L(:,:,k,i) = (2*(beta * (Si' * Si) * (HiT * HiT' ...
+            Sigma_L(:,:,k,i) = (2*(tau * (Si' * Si) * (HiT * HiT' ...
                 + trace(Sigma_H(:,:,k,i))) + z_inv(i)/2)).^(-1);
-            Gamma(i,k) = 2*beta * Sigma_L(:,:,k,i) ...
+            Gamma(i,k) = 2*tau * Sigma_L(:,:,k,i) ...
                 * trace(real(HiT' * Si' * Y_minusi));
             Y_minusi = Y_minusi - Gamma(i,k) * Si * HiT;
         end
@@ -105,10 +105,10 @@ for it = 1:MAXITER
             Si = S(:,i);
             Gamma_i = Gamma(i,k);
             YT_minusi = YT_minusi + (Gamma_i * Si * H(i,:,k)).';
-            Sigma_H(:,:,k,i) = (beta * (Gamma_i.^2 + Sigma_L(:,:,k,i)) ...
+            Sigma_H(:,:,k,i) = (tau * (Gamma_i.^2 + Sigma_L(:,:,k,i)) ...
                 * (Si' * Si) ...
                 + 1).^-1 * eye(M);
-            H(i,:,k) = beta * Gamma_i * Sigma_H(:,:,k,i) * YT_minusi * conj(Si);
+            H(i,:,k) = tau * Gamma_i * Sigma_H(:,:,k,i) * YT_minusi * conj(Si);
             YT_minusi = YT_minusi - (Gamma_i * Si * H(i,:,k)).';
         end
     end
@@ -136,7 +136,7 @@ for it = 1:MAXITER
         delta = Y(:,:,k) - X(:,:,k);
         err = err + trace(delta' * delta);
     end
-    err_novariance = err;
+
     for k=1:K
         for i=1:N
             Si = S(:,i);
@@ -150,16 +150,16 @@ for it = 1:MAXITER
         end
     end
     error(it) = err;
-    beta = (K*LM + e_0)./(err + f_0);
+    tau = (K*LM + e_0)./(err + f_0);
     %% update a_0
     for i=1:N
         a_0(i) = (kappa_a1 + lambda_0/2)/(kappa_a2 + z(i)/2);
     end
     %% Display progress
-    conv = 0;
+    relative_change = 0;
     for k=1:K
         delta_X = old_X(:,:,k) - X(:,:,k);
-        conv = conv + trace(delta_X' * delta_X) / (LM);
+        relative_change = relative_change + trace(delta_X' * delta_X) / (LM);
     end
     if verbose
         % For synthetic simulations
@@ -170,13 +170,13 @@ for it = 1:MAXITER
                 /trace(Y(:,:,k)' * Y(:,:,k));
         end
         recons_err = recons_err/K;
-        fprintf('Method: VIGH, it %d: Error = %g, beta = %g, conv = %g, err_old=%g, err=%g\n', it, recons_err, beta, conv, err_novariance, err);
+        fprintf('Method: VIGH, iter %d: error = %g, tau = %g, relative change = %g\n', it, recons_err, tau, relative_change);
     end
     %% Check convergence
-    if it > 20 && (conv < Threshold)
+    if it > 20 && (relative_change < Threshold)
         break;
     end
-end % End
+end
 for k=1:K
     G_hat(:,:,k) = diag(Gamma(:,k)) * H(:,:,k);
 end

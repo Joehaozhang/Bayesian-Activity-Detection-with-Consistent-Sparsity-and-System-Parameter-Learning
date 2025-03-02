@@ -64,8 +64,8 @@ Beta2       = zeros(N,K);
 %% Estimation Initialization
 G_hat_ghvi     = repmat(zeros(N,M),[1 1 K monte]);
 G_hat_map      = repmat(zeros(N,M),[1 1 K monte]);
-z_hat_vigh     = zeros(N,monte);
-z_inv_hat_vigh = zeros(N,monte);
+z_hat_ghvi     = zeros(N,monte);
+z_hat_map      = zeros(N,monte);
 %% Generate received signals
 for i = 1:1:monte
 %     Random active devices (Binomial distribution)
@@ -135,15 +135,21 @@ for i = 1:1:monte
         % Observed signal
         Y(:,:,k) = Y_real(:,:,k) + W;
     end
-    fprintf('Set %d\n', i); 
+    fprintf('Trial %d\n', i); 
 %% Activity detection and Channel estimation
 % GHVI algorithm
-[G_hat_ghvi(:,:,:,i), ~] = VIAD_GH_cellfree(Y,S);
+[G_hat_ghvi(:,:,:,i), z_hat_ghvi(:,i)] = VIAD_GH_cellfree(Y,S);
 % MAP algorithm
-[G_hat_map(:,:,:,i), ~] = MAP_GH_cellfree(Y,S);
+[G_hat_map(:,:,:,i), z_hat_map(:,i)] = MAP_GH_cellfree(Y,S);
 end
 %% Estimation END
  fprintf('Simulation Finished\n');
 %% Optional step
 % Dominant AP selection for devices
 DominantAPSelection();
+
+% Dominant channel energy based MAP performance evaluation
+[PMDPFANMSE_MAP] = PFAPMDNMSE_cellfree(G_hat_map,Active_List,10,G_hat_dominant_map,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_map);
+
+% Dominant channel energy based GHVI performance evaluation
+[PMDPFANMSE_GHVI] = PFAPMDNMSE_cellfree(G_hat_ghvi,Active_List,10,G_hat_dominant_ghvi,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_ghvi);
