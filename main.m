@@ -143,13 +143,24 @@ for i = 1:1:monte
 [G_hat_map(:,:,:,i), z_hat_map(:,i)] = MAP_GH_cellfree(Y,S);
 end
 %% Estimation END
- fprintf('Simulation Finished\n');
-%% Optional step
+fprintf('Simulation Finished\n');
+%% Optional step: Dominant channel-based detection
 % Dominant AP selection for devices
 DominantAPSelection();
 
 % Dominant channel energy based MAP performance evaluation
-[PMDPFANMSE_MAP] = PFAPMDNMSE_cellfree(G_hat_map,Active_List,10,G_hat_dominant_map,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_map);
+[PFAPMDNMSE_MAP] = PFAPMDNMSE_cellfree(G_hat_map,Active_List,10,G_hat_dominant_map,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_map);
 
 % Dominant channel energy based GHVI performance evaluation
-[PMDPFANMSE_GHVI] = PFAPMDNMSE_cellfree(G_hat_ghvi,Active_List,10,G_hat_dominant_ghvi,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_ghvi);
+[PFAPMDNMSE_GHVI] = PFAPMDNMSE_cellfree(G_hat_ghvi,Active_List,10,G_hat_dominant_ghvi,G_real_dominant,Gnorm2sum_real,Gnorm2sum_hat_ghvi);
+
+%% Optional step: Sparsity controlling hyper parameter-based detection (i.e., z-based)
+% Normalize hyper parameter z
+z_hat_map_normalized  = z_hat_map./(ones(N,1)*max(z_hat_map));
+z_hat_ghvi_normalized = z_hat_ghvi./(ones(N,1)*max(z_hat_ghvi));
+
+% z-based MAP performance evaluation
+[PFAPMD_map] = PFAPMD(z_hat_map,Active_List,100);
+
+% z-based GHVI performance evaluation
+[PFAPMD_ghvi] = PFAPMD(z_hat_ghvi,Active_List,100);

@@ -1,28 +1,28 @@
 function [PFA_PMD_PD_MSE] = PFAPMDNMSE_cellfree(G_hat,Active_List,N_thr,Ga_hat,Ga_real,Ganorm_real,Ganorm_hat)
 
 %% Notation
-% ----------------------------------------                      
+% ----------------------------------------
 % |G_hat       |Channel Estimation       |
 % |Active_List |Active device list       |
 % |N_thr       |Number of thresholds     |
 % ----------------------------------------
 
 [N,M,K,monte] = size(G_hat);
-N_total     = N * monte;
-N_active    = length(find(Active_List > 0));
-Thr_min   = 1/1e2;
-Thr_max   = 10 * Thr_min;
-threshold = linspace(Thr_min, Thr_max, N_thr);
-PFA       = zeros(N_thr,1);
-PMD       = zeros(N_thr,1);
-PD        = zeros(N_thr,1);
-MSE       = zeros(N_thr,1);
+N_total       = N * monte;
+N_active      = length(find(Active_List > 0));
+Thr_min       = 1/1e2;
+Thr_max       = 10 * Thr_min;
+threshold     = linspace(Thr_min, Thr_max, N_thr);
+PFA           = zeros(N_thr,1);
+PMD           = zeros(N_thr,1);
+PD            = zeros(N_thr,1);
+MSE           = zeros(N_thr,1);
 
 for i=1:N_thr
     MD      = 0;
     FA      = 0;
     MSE_hat = 0;
-    Thr_i = threshold(i) * max(Ganorm_real);
+    Thr_i   = threshold(i) * max(Ganorm_real);
     for j=1:monte
         Idx_hat  = find(Ganorm_hat(:,1,j) > Thr_i(:,:,j));
         Idx_real = find(Active_List(:,j) > 0);
