@@ -14,7 +14,7 @@ for j=1:monte
     for n=1:N
         G_hat_dominant_ghvi(n,:,j) = G_hat_ghvi(n,:,DominantAP(n,j),j);
         G_hat_dominant_map(n,:,j)  = G_hat_map(n,:,DominantAP(n,j),j);
-        G_real_dominant(n,:,j)    = G_real(n,:,DominantAP(n,j),j); 
+        G_real_dominant(n,:,j)    = G_real(n,:,DominantAP(n,j),j);
     end
 end
 

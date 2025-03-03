@@ -22,7 +22,7 @@ function [G_hat, z] = MAP_GH_cellfree(Y, S)
 % G: channel matrix where each row represents the corresponding channel |
 % vector                                                                |
 % -----------------------------------------------------------------------
-%% Initialization 
+%% Initialization
 [L, M, K] = size(Y); % L: sequence length, M: antenna, K: BS
 LM = L*M;
 [~, N] = size(S);
@@ -31,7 +31,7 @@ S2sum  = trace(S * S');
 scale2 = Y2sum / (S2sum * LM);
 
 % Random initialization for Gamma and H
-Gamma = rand(N,K) * 1; 
+Gamma = rand(N,K) * 1;
 H = repmat(zeros(N,M),[1 1 K]);
 for k=1:K
     H(:,:,k) = complex(randn(N,M),randn(N,M));
@@ -121,7 +121,7 @@ for it = 1:MAXITER
     end
     %% Update beta
     err = 0;
-    for k=1:K 
+    for k=1:K
         delta = Y(:,:,k) - X(:,:,k);
         err = err + trace(delta' * delta);
     end

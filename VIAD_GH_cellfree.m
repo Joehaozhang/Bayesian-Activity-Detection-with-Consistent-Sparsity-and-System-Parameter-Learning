@@ -22,7 +22,7 @@ function [G_hat,z] = VIAD_GH_cellfree(Y, S)
 % G: channel matrix where each row represents the corresponding channel |
 % vector                                                                |
 % -----------------------------------------------------------------------
-%% Initialization 
+%% Initialization
 [L, M, K] = size(Y); % L: sequence length, M: antenna, K: BS
 LM = L*M;
 [~, N] = size(S);
@@ -32,7 +32,7 @@ scale2 = Y2sum / (S2sum * LM);
 scale  = sqrt(scale2);
 
 % Random initialization for Gamma and H
-Gamma = randn(N,K) * scale; 
+Gamma = randn(N,K) * scale;
 H = repmat(zeros(N,M),[1 1 K]);
 for k=1:K
     H(:,:,k) = complex(randn(N,M),randn(N,M));
@@ -120,7 +120,7 @@ for it = 1:MAXITER
     for i=1:N
         a(i)  = a_0(i);
         Sig_L = 0;
-        for k=1:K 
+        for k=1:K
             Sig_L = Sig_L + Sigma_L(:,:,k,i);
         end
         b(i)      = b_0 + (sum(Gamma(i,:).^2) + Sig_L);
@@ -132,7 +132,7 @@ for it = 1:MAXITER
     end
     %% Update beta
     err = 0;
-    for k=1:K 
+    for k=1:K
         delta = Y(:,:,k) - X(:,:,k);
         err = err + trace(delta' * delta);
     end

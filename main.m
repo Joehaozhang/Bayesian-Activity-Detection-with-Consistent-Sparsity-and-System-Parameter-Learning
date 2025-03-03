@@ -1,7 +1,7 @@
 clear all
 clc
 %% Notation
-% ---------------------------------------- 
+% ----------------------------------------
 % |D       |Area size                    |
 % |K       |Number of AP                 |
 % |N       |Number of potential users    |
@@ -15,21 +15,21 @@ clc
 % ----------------------------------------
 %% Simulation setting
 % Area Size(km)
-D = 3; 
+D = 3;
 
-% Number of BS                                                         
+% Number of BS
 K = 12;
 
-% Total Number of Users in Cell Network 
+% Total Number of Users in Cell Network
 N = 200;
 
-% Number of Antennas at each AP 
+% Number of Antennas at each AP
 M = 8;
 
 % Binomial Activity percentage: Activity pattern
 epsilon = 0.1;
 
-% Pilot Sequence Length 
+% Pilot Sequence Length
 L = 30;
 
 % Noise Parameter : bandwidth = 1 MHz
@@ -48,14 +48,14 @@ S = S./vecnorm(S,2,1);
 
 %%    Locations of BS and Users
 %     Uniformly distributed APs
-    AP = [-D/3,3*D/8;0,3*D/8;D/3,3*D/8;-D/3,D/8;0,D/8;D/3,D/8;-D/3,-D/8;0,-D/8;D/3,-D/8;-D/3,-3*D/8;0,-3*D/8;D/3,-3*D/8];
+AP = [-D/3,3*D/8;0,3*D/8;D/3,3*D/8;-D/3,D/8;0,D/8;D/3,D/8;-D/3,-D/8;0,-D/8;D/3,-D/8;-D/3,-3*D/8;0,-3*D/8;D/3,-3*D/8];
 
 %     Random APs
-    % AP=unifrnd(-D/2,D/2,K,2);
+% AP=unifrnd(-D/2,D/2,K,2);
 %% Variables for evaluation initialization
 Y_real      = zeros(L,M,K);
 Y           = Y_real;
-gamma       = zeros(N,monte,K); 
+gamma       = zeros(N,monte,K);
 G_real      = repmat(zeros(N,M),[1 1 M monte]);
 Active_List = zeros(N,monte);
 Beta        = zeros(N,K);
@@ -68,21 +68,21 @@ z_hat_ghvi     = zeros(N,monte);
 z_hat_map      = zeros(N,monte);
 %% Generate received signals
 for i = 1:1:monte
-%     Random active devices (Binomial distribution)
-%     Ac_list = binornd(1,epsilon,[K,1]);
-%     Active_List(:,i) = Ac_list;
+    %     Random active devices (Binomial distribution)
+    %     Ac_list = binornd(1,epsilon,[K,1]);
+    %     Active_List(:,i) = Ac_list;
 
-%     Random active devices (fixed number)
+    %     Random active devices (fixed number)
     Ac_idx = randperm(N);
     Ac_list = zeros(N,1);
     Ac_list(Ac_idx(1:N*epsilon)) = 1;
 
-%     Index of active devices
+    %     Index of active devices
     idx = find(Ac_list);
     Active_List(idx,i)=1;
-%%     Uniformly allocate the UT locations in a DxD area
+    %%     Uniformly allocate the UT locations in a DxD area
     UT=unifrnd(-D/2,D/2,N,2);
-%%     Uniformly allocate the UT locations in a circular area
+    %%     Uniformly allocate the UT locations in a circular area
     for k=1:K
         %     Distance-based pathloss (distance from M BS)
         dist = sqrt(sum((UT - AP(k,:)).^2,2));
@@ -116,10 +116,10 @@ for i = 1:1:monte
         K_rician = 0.6*rand(N*Percent_rician,1);
         random_phase_shift = sqrt(-1)*2*pi*rand(N*Percent_rician,1);
         H(N_rician(1:Percent_rician*N),:) = sqrt(K_rician./(K_rician+1)).*exp(random_phase_shift * linspace(0,M-1,M)) + sqrt(1./(K_rician+1)) .* H(N_rician(1:Percent_rician*N),:);
-        
+
         % Noise
         W = 10^(0.1*sqrt(0.2)*randn(1))*(1/sqrt(2)*complex(randn(L,M),randn(L,M)));
-        
+
         % Large-scale fading coefficients
         X = diag(sqrt(L*gamma(:,i,k)));
 
@@ -135,12 +135,12 @@ for i = 1:1:monte
         % Observed signal
         Y(:,:,k) = Y_real(:,:,k) + W;
     end
-    fprintf('Trial %d\n', i); 
-%% Activity detection and Channel estimation
-% GHVI algorithm
-% [G_hat_ghvi(:,:,:,i), z_hat_ghvi(:,i)] = VIAD_GH_cellfree(Y,S);
-% MAP algorithm
-[G_hat_map(:,:,:,i), z_hat_map(:,i)] = MAP_GH_cellfree(Y,S);
+    fprintf('Trial %d\n', i);
+    %% Activity detection and Channel estimation
+    % GHVI algorithm
+    % [G_hat_ghvi(:,:,:,i), z_hat_ghvi(:,i)] = VIAD_GH_cellfree(Y,S);
+    % MAP algorithm
+    [G_hat_map(:,:,:,i), z_hat_map(:,i)] = MAP_GH_cellfree(Y,S);
 end
 %% Estimation END
 fprintf('Simulation Finished\n');
