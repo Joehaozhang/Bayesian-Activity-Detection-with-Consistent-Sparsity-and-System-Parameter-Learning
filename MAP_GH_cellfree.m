@@ -48,7 +48,6 @@ end
 z_inv   = K*ones(N,1);
 z       = 1 ./ z_inv;
 a        = 5e-4*ones(N,1);
-% b        = 10*rand(N,1);
 b       = 1*ones(N,1);
 
 % GIG distribution

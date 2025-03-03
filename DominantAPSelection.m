@@ -17,6 +17,7 @@ for j=1:monte
         G_real_dominant(n,:,j)    = G_real(n,:,DominantAP(n,j),j); 
     end
 end
+
 Gnorm2sum_real     = sum(G_real_dominant .* conj(G_real_dominant),2);
 Gnorm2sum_hat_ghvi = sum(G_hat_dominant_ghvi .* conj(G_hat_dominant_ghvi),2);
 Gnorm2sum_hat_map  = sum(G_hat_dominant_map .* conj(G_hat_dominant_map),2);

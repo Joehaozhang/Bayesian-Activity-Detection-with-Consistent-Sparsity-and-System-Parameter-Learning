@@ -6,7 +6,7 @@ function [PFA_PMD_PD_MSE] = PFAPMDNMSE_cellfree(G_hat,Active_List,N_thr,Ga_hat,G
 % |Active_List |Active device list       |
 % |N_thr       |Number of thresholds     |
 % ----------------------------------------
-
+%% Initialization
 [N,M,K,monte] = size(G_hat);
 N_total       = N * monte;
 N_active      = length(find(Active_List > 0));
@@ -17,7 +17,7 @@ PFA           = zeros(N_thr,1);
 PMD           = zeros(N_thr,1);
 PD            = zeros(N_thr,1);
 MSE           = zeros(N_thr,1);
-
+%% PFAPMDNMSE
 for i=1:N_thr
     MD      = 0;
     FA      = 0;
@@ -41,7 +41,6 @@ for i=1:N_thr
         MSE_new  = diag(Err * Err')./diag(G_real * G_real');
         MSE_hat  = MSE_hat + sum(MSE_new)/length(Idx_real);
     end
-
     Pmd = MD/N_active;
     Pfa = FA/(N_total - N_active);
     Pd  = 1 - Pmd;
@@ -51,5 +50,4 @@ for i=1:N_thr
     PFA(i) = Pfa;
     MSE(i) = MSE_hat/monte;
 end
-
 PFA_PMD_PD_MSE = [PFA PMD PD MSE];

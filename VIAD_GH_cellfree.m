@@ -177,6 +177,7 @@ for it = 1:MAXITER
         break;
     end
 end
+%% Generate channel estimation
 for k=1:K
     G_hat(:,:,k) = diag(Gamma(:,k)) * H(:,:,k);
 end
