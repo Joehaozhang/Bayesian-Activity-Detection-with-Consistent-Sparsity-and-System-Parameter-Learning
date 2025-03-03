@@ -5,7 +5,7 @@ function [PFA_PMD] = PFAPMD(z_hat,Active_List,N_thr)
 % |Active_List |Active device list       |
 % |N_thr       |Number of thresholds     |
 % ----------------------------------------
-
+%% Initializations
 [N,monte] = size(z_hat);
 N_total = N * monte;
 N_active      = length(find(Active_List > 0));
@@ -14,7 +14,7 @@ Thr_max       = 1;
 threshold     = linspace(Thr_min, Thr_max, N_thr);
 PFA           = zeros(N_thr,1);
 PMD           = zeros(N_thr,1);
-
+%% PMDPFA
 for i=1:N_thr
     MD    = 0;
     FA    = 0;
@@ -34,7 +34,6 @@ for i=1:N_thr
     PMD(i) = Pmd;
     PFA(i) = Pfa;
 end
-
 
 PFA_PMD = [PFA PMD];
 end
