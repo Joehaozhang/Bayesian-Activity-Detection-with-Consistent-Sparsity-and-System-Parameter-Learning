@@ -27,7 +27,7 @@ N = 200;
 M = 8;
 
 % Binomial Activity percentage: Activity pattern
-epsilon = 20/N;
+epsilon = 0.1;
 
 % Pilot Sequence Length 
 L = 30;
