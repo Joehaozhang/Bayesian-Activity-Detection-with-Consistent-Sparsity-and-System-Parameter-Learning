@@ -71,7 +71,6 @@ e_0      = 1e-6;
 f_0      = 1e-6;
 
 % Algorithm Parameter
-error = zeros(200); % Error record
 MAXITER     = 100;  % Maximal iterations
 verbose     = 1;   % Progress display
 Threshold = 1e-4;% Algorithm break threshold
@@ -149,7 +148,6 @@ for it = 1:MAXITER
                 * (Si' * Si);
         end
     end
-    error(it) = err;
     tau = (K*LM + e_0)./(err + f_0);
     %% update a_0
     for i=1:N

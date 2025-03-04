@@ -1,4 +1,4 @@
-clear all
+clearvars
 clc
 %% Notation
 % ----------------------------------------
@@ -123,7 +123,7 @@ for i = 1:1:monte
         % Large-scale fading coefficients
         X = diag(sqrt(L*gamma(:,i,k)));
 
-        %     Record pathloss
+        % Record pathloss
         pathloss = Beta2';
 
         % Record true channel
