@@ -7,22 +7,22 @@ Activity detection is an important task in the next generation grant-free multip
 
 ## Function Description
 
-### main.m function
+### main
 Main program for activity detection in cell-free systems
 
-### MAP_GH_cellfree.m function
+### MAP_GH_cellfree
 MAP algorithm for activity status and system parameter estimation in cell-free systems
 
-### VIAD_GH_cellfree.m function
+### VIAD_GH_cellfree
 GHVI algorithm for activity status and system parameter estimation in cell-free systems
 
-### DominantAPSelection.m function
+### DominantAPSelection
 Script to select dominant AP for each device
 
-### PFAPMD.m function
+### PFAPMD
 Generate PFA and PMD by selecting different thresholds for hyper parameter z
 
-### PFAPMDNMSE_cellfree.m function
+### PFAPMDNMSE_cellfree
 Generate PFA, PMD, and NMSE by selecting different threshold for dominant channel energy
 
 ## Copyright
