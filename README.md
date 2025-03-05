@@ -23,4 +23,4 @@ Generate PFA and PMD by selecting different thresholds for hyper parameter z
 Generate PFA, PMD, and NMSE by selecting different threshold for dominant channel energy
 
 ## Copyright
-If you use this code, please cite our article [Link](https://ieeexplore.ieee.org/document/10418889).
+If you use this code, please cite [our published TSP article](https://ieeexplore.ieee.org/document/10418889).
