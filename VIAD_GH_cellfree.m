@@ -11,7 +11,7 @@ function [G_hat,z] = VIAD_GH_cellfree(Y, S)
 % N is Gaussian noise
 % -----------------------------------------------------------------------
 %                                 INPUTS                                |
-% Y: input matrix (received signals in BS)                              |
+% Y: input matrix (received signals in APs)                             |
 % S: pilot signals transmitted                                          |
 % verbose: output the progress? (0/1) default: 1.                       |
 % MAXITER: max number of iterations. default: 200.                      |

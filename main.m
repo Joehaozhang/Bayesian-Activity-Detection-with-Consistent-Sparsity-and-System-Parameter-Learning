@@ -14,30 +14,30 @@ clc
 % |Y       |Received signals             |
 % ----------------------------------------
 %% Simulation setting
-% Area Size(km)
+% Area size(km)
 D = 3;
 
-% Number of BS
+% Number of AP
 K = 12;
 
-% Total Number of Users in Cell Network
+% Total number of users
 N = 200;
 
-% Number of Antennas at each AP
+% Number of antennas at each AP
 M = 8;
 
-% Binomial Activity percentage: Activity pattern
+% Binomial activity percentage: Activity pattern
 epsilon = 0.1;
 
-% Pilot Sequence Length
+% Pilot sequence length
 L = 30;
 
-% Noise Parameter : bandwidth = 1 MHz
+% Noise parameter : Bandwidth = 1 MHz
 sigma_sqr_dBm = -109;
 sigma_sqr = 10^((sigma_sqr_dBm-30)/10); % Real noise variance
 sigma_sqrN = 1; % Normalized Sigma2
 
-% Transmit Power Constraint in W
+% Transmit power constraint in W
 TxPow = 200e-3; % 23dBm
 
 % Number of Monte-Carlo simulations
